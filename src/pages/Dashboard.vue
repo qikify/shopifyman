@@ -38,7 +38,8 @@
                       :tone="isError ? 'critical' : 'success'"
                     ) {{ status }}
                   Scrollable
-                    Text(as="pre", :tone="isError ? 'critical' : 'base'") {{ response }}
+                    Text(as="pre", :tone="isError ? 'critical' : 'base'", v-if="isJson") {{ response }}
+                    div(v-else, v-html="response")
 </template>
 
 <script setup lang="ts">
@@ -53,6 +54,7 @@ const body = ref('');
 const response = ref<any>('');
 const isLoading = ref(false);
 const isError = ref(false);
+const isJson = ref(false);
 const status = ref(0);
 const responseRef = useTemplateRef<HTMLElement>('responseRef');
 
@@ -69,6 +71,7 @@ const sendRequest = async () => {
     status.value = 0;
     isError.value = false;
     isLoading.value = true;
+    response.value = '';
     const payload = JSON.parse(body.value || '{}');
     const options: any = {};
 
@@ -80,10 +83,12 @@ const sendRequest = async () => {
 
     response.value = res.json;
     status.value = res.statusCode;
+    isJson.value = true;
     console.log('Response: ', res);
   } catch (err: any) {
     console.log(err);
 
+    isJson.value = typeof err.json !== 'string';
     response.value = err.json;
     status.value = err.statusCode;
     isError.value = true;
@@ -103,6 +108,7 @@ const responseHeight = computed(() => {
 onMounted(() => {
   document.addEventListener('keydown', (event) => {
     if (event.ctrlKey && event.key == "Enter") {
+      window.scrollTo(0, 0);
       sendRequest();
     }
   });

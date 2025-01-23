@@ -6,7 +6,7 @@ const parseJSON = (response: any) => {
   try {
     data = JSON.parse(response && response.responseText || response);
   } catch (error) {
-    data = { error };
+    data = response.toString();
   }
 
   return data;
