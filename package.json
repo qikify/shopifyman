@@ -1,0 +1,39 @@
+{
+  "name": "scaffolding-portal",
+  "author": "jane",
+  "private": true,
+  "version": "0.0.0",
+  "engines": {
+    "node": "20"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host --port 3000",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@ownego/polaris-vue": "2.1.13",
+    "vue": "3.5.12",
+    "vue-router": "4.4.5"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-patch": "1.10.4",
+    "@stylistic/eslint-plugin-js": "2.9.0",
+    "@types/node": "^22.8.4",
+    "@vitejs/plugin-vue": "5.1.4",
+    "@volar/vue-language-plugin-pug": "^1.6.5",
+    "@vue/eslint-config-typescript": "14.1.3",
+    "@vue/language-plugin-pug": "2.1.8",
+    "eslint": "9.13.0",
+    "eslint-plugin-import-newlines": "1.4.0",
+    "eslint-plugin-vue": "9.30.0",
+    "eslint-plugin-vue-pug": "0.6.2",
+    "pug": "3.0.3",
+    "sass": "1.80.5",
+    "typescript": "5.6.3",
+    "vite": "5.4.10",
+    "vite-svg-loader": "5.1.0",
+    "vue-tsc": "2.1.8"
+  }
+}

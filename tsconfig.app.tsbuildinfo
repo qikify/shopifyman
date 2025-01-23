@@ -1,0 +1,1 @@
+{"root":["./src/main.ts","./src/components/index.ts","./src/components/base/index.ts","./src/configs/app.ts","./src/configs/index.ts","./src/pages/index.ts","./src/router/index.ts","./src/types/global.d.ts","./src/app.vue","./src/components/base/applayout.vue","./src/pages/dashboard.vue"],"version":"5.6.3"}
