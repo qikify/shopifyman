@@ -75,7 +75,7 @@ const sendRequest = async () => {
     const payload = JSON.parse(body.value || '{}');
     const options: any = {};
 
-    if (body.value) {
+    if (body.value && method.value !== 'get') {
       options.body = JSON.stringify(payload)
     }
 
@@ -108,10 +108,16 @@ const responseHeight = computed(() => {
 onMounted(() => {
   document.addEventListener('keydown', (event) => {
     if (event.ctrlKey && event.key == "Enter") {
+      const target = event.target as HTMLElement;
+
+      if (target.classList.contains('cm-content')) {
+        event.preventDefault();
+      }
+
       window.scrollTo(0, 0);
       sendRequest();
     }
-  });
+  }, { capture: true });
 });
 </script>
 
