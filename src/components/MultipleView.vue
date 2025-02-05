@@ -1,16 +1,23 @@
-<template>
-<Tabs
-  :tabs="tabs"
-  :selected="selected"
-  :canCreateNewView="true"
-  @select="handleSelected"
-  @create-new-view="onCreateNewView"
->
-</Tabs>
+<template lang="pug">
+.multiple-view
+  InlineStack
+    Tabs(
+      :tabs="tabs"
+      :selected="selected"
+      :canCreateNewView="false"
+      @select="handleSelected"
+      @create-new-view="onCreateNewView"
+    )
+    Button(
+      :icon="PlusIcon"
+      @click="onCreateNewView"
+      variant="plain",
+    )
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import PlusIcon from '@icons/PlusIcon.svg';
 
 type Props = {
   itemStrings: any[];
@@ -43,7 +50,7 @@ const tabs = computed(() =>
         : [
           {
             type: 'rename',
-            onPrimaryAction: async (value: string) => {
+            onPrimaryAction: (value: string) => {
               emits('rename-view', index, value);
             },
           },
@@ -58,8 +65,8 @@ const tabs = computed(() =>
   })),
 );
 
-const onCreateNewView = async (value: string) => {
-  emits('create-view', value);
+const onCreateNewView = () => {
+  emits('create-view', 'New View');
 };
 
 const handleSelected = (value: number) => {

@@ -6,7 +6,7 @@
       MultipleView(
         :item-strings="tabs",
         :selected="selectedTab",
-        @create-new-view="addView",
+        @create-view="addView",
         @delete-view="deleteView",
         @rename-view="renameView",
         @select-view="changeTab",
@@ -107,8 +107,11 @@ const sendRequest = async () => {
     isError.value = true;
   } finally {
     isLoading.value = false;
+    const currentView = views.value[selectedTab.value];
+
     views.value[selectedTab.value] = {
-      ...views.value[selectedTab.value],
+      ...currentView,
+      name: currentView.isFixed ? currentView.name : url.value,
       method: method.value,
       url: url.value,
       response: response.value,
@@ -133,7 +136,11 @@ const deleteView = (index) => {
 }
 
 const renameView = (index, name) => {
-  views.value[index].name = name;
+  views.value[index] = {
+    ...views.value[index],
+    name,
+    isFixed: true,
+  }
 }
 
 const changeTab = (tab) => {
