@@ -111,7 +111,7 @@ const sendRequest = async () => {
 
     views.value[selectedTab.value] = {
       ...currentView,
-      name: currentView.isFixed ? currentView.name : url.value,
+      name: currentView.isFixed ? currentView.name : `${method.value.toUpperCase()} ${url.value}`,
       method: method.value,
       url: url.value,
       response: response.value,
