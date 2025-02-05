@@ -3,6 +3,14 @@
   Box(padding="1000")
     BlockStack(gap="400")
       Text(as="h1", variant="headingLg") Shopifyman
+      MultipleView(
+        :item-strings="tabs",
+        :selected="selectedTab",
+        @create-new-view="addView",
+        @delete-view="deleteView",
+        @rename-view="renameView",
+        @select-view="changeTab",
+      )
       InlineGrid(:columns="['oneThird', 'twoThirds']", gap="400")
         BlockStack(gap="400")
           div.request
@@ -42,21 +50,26 @@
                     div(v-else, v-html="response")
 </template>
 
-<script setup lang="ts">
-import { computed, onMounted, ref, useTemplateRef } from 'vue';
+<script setup>
+import { computed, onMounted, ref, useTemplateRef, watch } from 'vue';
 import { fetchFunction } from '@/services';
 import JsonEditorVue from 'json-editor-vue';
 import { Mode } from 'vanilla-jsoneditor';
+import { MultipleView } from '@/components';
 
 const method = ref('get');
 const url = ref('');
 const body = ref('');
-const response = ref<any>('');
+const response = ref('');
 const isLoading = ref(false);
 const isError = ref(false);
 const isJson = ref(false);
 const status = ref(0);
-const responseRef = useTemplateRef<HTMLElement>('responseRef');
+const responseRef = useTemplateRef('responseRef');
+const views = ref([{ name: 'Default' }]);
+const selectedTab = ref(0);
+
+const tabs = computed(() => views.value.map(item => item.name));
 
 const options = [
   { value: 'get', label: 'GET' },
@@ -73,19 +86,19 @@ const sendRequest = async () => {
     isLoading.value = true;
     response.value = '';
     const payload = JSON.parse(body.value || '{}');
-    const options: any = {};
+    const options = {};
 
     if (body.value && method.value !== 'get') {
       options.body = JSON.stringify(payload)
     }
 
-    const res = await (fetchFunction as any)[method.value](url.value, options);
+    const res = await (fetchFunction)[method.value](url.value, options);
 
     response.value = res.json;
     status.value = res.statusCode;
     isJson.value = true;
     console.log('Response: ', res);
-  } catch (err: any) {
+  } catch (err) {
     console.log(err);
 
     isJson.value = typeof err.json !== 'string';
@@ -94,6 +107,16 @@ const sendRequest = async () => {
     isError.value = true;
   } finally {
     isLoading.value = false;
+    views.value[selectedTab.value] = {
+      ...views.value[selectedTab.value],
+      method: method.value,
+      url: url.value,
+      response: response.value,
+      status: status.value,
+      body: body.value,
+      isError: isError.value,
+      isJson: isJson.value,
+    };
   }
 };
 
@@ -105,10 +128,51 @@ const responseHeight = computed(() => {
       : window.innerHeight - responseRef.value?.getBoundingClientRect().top - 60;
 });
 
+const deleteView = (index) => {
+  views.value.splice(index, 1);
+}
+
+const renameView = (index, name) => {
+  views.value[index].name = name;
+}
+
+const changeTab = (tab) => {
+  selectedTab.value = tab;
+  updateView(views.value[tab]);
+}
+
+const addView = (name) => {
+  views.value.push({ name });
+}
+
+const updateView = (data) => {
+  url.value = data.url || '';
+  method.value = data.method || 'get';
+  response.value = data.response || '';
+  status.value = data.status || 0;
+  body.value = data.body || '';
+  isError.value = data.isError || false;
+  isJson.value = data.isJson || false;
+};
+
+const setupView = () => {
+  const storedViews = localStorage.getItem('shopifyman-views');
+
+  if (storedViews) {
+    const data = JSON.parse(storedViews);
+    views.value = data;
+    updateView(data[selectedTab.value]);
+  }
+}
+
+watch(() => views.value, () => {
+  localStorage.setItem('shopifyman-views', JSON.stringify(views.value));
+}, { deep: true });
+
 onMounted(() => {
   document.addEventListener('keydown', (event) => {
     if (event.ctrlKey && event.key == "Enter") {
-      const target = event.target as HTMLElement;
+      const target = event.target;
 
       if (target.classList.contains('cm-content')) {
         event.preventDefault();
@@ -118,6 +182,8 @@ onMounted(() => {
       sendRequest();
     }
   }, { capture: true });
+
+  setupView();
 });
 </script>
 
