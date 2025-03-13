@@ -28,6 +28,7 @@ interface Emits {
   /** Emits when the action is expand */
   (event: 'delete-view', index: number): void;
   (event: 'rename-view', index: number, name: string): void;
+  (event: 'duplicate-view', index: number, name: string): void;
   (event: 'create-view', name: string): void;
   (event: 'select-view', value: number): void;
 }
@@ -44,24 +45,27 @@ const tabs = computed(() =>
     onTabAction: () => {},
     id: `${item}-${index}`,
     isLocked: index === 0,
-    actions:
-      index === 0
-        ? []
-        : [
-          {
-            type: 'rename',
-            onPrimaryAction: (value: string) => {
-              emits('rename-view', index, value);
-            },
+    actions: [
+        {
+          type: 'rename',
+          onPrimaryAction: (value: string) => {
+            emits('rename-view', index, value);
           },
-          {
-            type: 'delete',
-            onPrimaryAction: async () => {
-              await sleep(1);
-              emits('delete-view', index);
-            },
+        },
+        {
+          type: 'duplicate',
+          onPrimaryAction: (value: string) => {
+            emits('duplicate-view', index, value);
           },
-        ],
+        },
+        {
+          type: 'delete',
+          onPrimaryAction: async () => {
+            await sleep(1);
+            emits('delete-view', index);
+          },
+        },
+      ],
   })),
 );
 

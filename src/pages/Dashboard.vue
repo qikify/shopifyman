@@ -9,6 +9,7 @@
         @create-view="addView",
         @delete-view="deleteView",
         @rename-view="renameView",
+        @duplicate-view="duplicateView",
         @select-view="changeTab",
       )
       InlineGrid(:columns="['oneThird', 'twoThirds']", gap="400")
@@ -141,6 +142,14 @@ const renameView = (index, name) => {
     name,
     isFixed: true,
   }
+}
+
+const duplicateView = (index, name) => {
+  views.value.push({
+    ...views.value[index],
+    name,
+    isFixed: false,
+  });
 }
 
 const changeTab = (tab) => {
