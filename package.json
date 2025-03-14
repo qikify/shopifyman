@@ -13,7 +13,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@ownego/polaris-vue": "2.1.13",
+    "@ownego/polaris-vue": "^2.1.26",
     "json-editor-vue": "^0.17.3",
     "vue": "3.5.12",
     "vue-router": "4.4.5"

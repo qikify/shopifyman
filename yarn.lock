@@ -425,10 +425,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@ownego/polaris-vue@2.1.13":
-  version "2.1.13"
-  resolved "https://registry.yarnpkg.com/@ownego/polaris-vue/-/polaris-vue-2.1.13.tgz#f31ef3a23e1fd3f102cf91a7b18b05e91a16eeb2"
-  integrity sha512-gZdfk+78uMrd8UVvbMj5jXkvWNVq6uK1KIe2gOmO8KwD2bfYxFGfFlJCnS2NRoOjjtpS2bsUHUIauT4ojyeUPA==
+"@ownego/polaris-vue@^2.1.26":
+  version "2.1.26"
+  resolved "https://registry.yarnpkg.com/@ownego/polaris-vue/-/polaris-vue-2.1.26.tgz#e49140897fa86979eab806134787728523bbbaaa"
+  integrity sha512-T1j4U69hsr7QhLWgMbSLgjB33yBuRjiJJuxLWy6hIsp+b/VoukH3YR1VZo9Gg/1LYyfPzcJw8wNKVGtbW6PTTA==
   dependencies:
     "@shopify/polaris-icons" "9.3.0"
     vite-svg-loader "^5.1.0"
